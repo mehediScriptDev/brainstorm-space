@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# IdeaVault – Startup Idea Sharing Platform
 
-## Getting Started
+IdeaVault is a web-based community platform where startup founders, engineers, and creatives collaborate to share, validate, and refine breakthrough business concepts. Designed for fast feedback loops and early-stage validation, the system allows innovators to discover trending ideas, aggregate platform-wide statistics, and gather structural feedback before launching a full product.
 
-First, run the development server:
+**Live Application Demo:** [https://ideavault-platform.vercel.app](https://ideavault-platform.vercel.app)
+
+---
+
+### Core Key Features
+
+*   **SaaS Pitch Board (Full Idea Specs):** Allows builders to publish startup concepts using an extensive spec sheet—defining the target persona, estimated launch budget, core elevator pitch, problem statement, and proposed solution.
+*   **Interactive Viability Engine:** A gamified, real-time assessment tool where users can enter a project, toggle market niche parameters, and receive an instant visual viability rating, projected sector size, and structural execution blueprint.
+*   **Complete Comments CRUD System:** Encourages community interaction through feedback loops, allowing authenticated builders to post criticism, inline-edit comments, and delete reviews securely in real time.
+*   **Global Theme State Controller:** Integrates light and dark themes toggled directly from the navbar, globally adjusting colors and typography variables seamlessly to reduce eye strain.
+*   **Secure Auth Flow with State Persistence:** Provides persistent user session caching, custom registration credentials validation, and a profile settings dashboard—ensuring that reloading any protected route maintains the logged-in user state.
+
+---
+
+### Technologies Leveraged
+
+*   **Framework:** Next.js 15+ (App Router)
+*   **Language & Logic:** React 19 & JavaScript
+*   **Styling & UI Tokens:** Tailwind CSS v4 & daisyUI
+*   **State Management:** React Context (LocalStorage Persistence)
+
+---
+
+### Getting Started & Installation
+
+First, clone the client repository, navigate to the folder, and install all package dependencies:
+
+```bash
+npm install
+```
+
+Start the development server locally:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open [http://localhost:3000](http://localhost:3000) inside your web browser to explore IdeaVault!
