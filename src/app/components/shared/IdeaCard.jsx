@@ -73,6 +73,8 @@ const IdeaCard = ({ idea, onLike }) => {
         </div>
       </div>
     </article>
+
+    
   );
 };
 
