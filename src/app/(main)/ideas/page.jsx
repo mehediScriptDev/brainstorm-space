@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, Suspense, useMemo } from "react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useIdeaVault } from "@/context/IdeaVaultContext";
-import { Search, Lightbulb, User, Target, Heart, MessageSquare } from "lucide-react";
+import { Search, Lightbulb } from "lucide-react";
+import IdeaCard from "@/app/components/shared/IdeaCard";
 
 function IdeasContent() {
     const { ideas, likeIdea } = useIdeaVault();
@@ -67,69 +67,7 @@ function IdeasContent() {
             {filteredIdeas.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-slide-in">
                     {filteredIdeas.map((idea) => (
-                        <div
-                            key={idea.id}
-                            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col h-full transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                        >
-                            <div className="h-48 w-full overflow-hidden relative bg-gray-200 dark:bg-gray-700">
-                                <img 
-                                    src={idea.imageUrl} 
-                                    alt={idea.title} 
-                                    className="w-full h-full object-cover"
-                                    onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }}
-                                />
-                                <div className="absolute top-4 right-4 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                                    {idea.category}
-                                </div>
-                            </div>
-
-                            <div className="p-6 grow flex flex-col">
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">
-                                    {idea.title}
-                                </h3>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2 grow">
-                                    {idea.shortDescription}
-                                </p>
-                                
-                                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4 space-x-4 font-semibold">
-                                    <span className="flex items-center">
-                                        <User size={16} className="mr-1 text-indigo-500" /> 
-                                        {idea.authorName}
-                                    </span>
-                                    <span className="flex items-center">
-                                        <Target size={16} className="mr-1 text-indigo-500" /> 
-                                        {idea.targetAudience || "General"}
-                                    </span>
-                                </div>
-
-                                <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-4 mt-2">
-                                    <div className="flex items-center gap-3">
-                                        <button
-                                            onClick={() => likeIdea(idea.id)}
-                                            className="flex items-center gap-1 text-xs font-bold text-gray-500 hover:text-red-500 transition-colors"
-                                            title="Validate Idea"
-                                        >
-                                            <Heart size={15} />
-                                            <span>{idea.likes}</span>
-                                        </button>
-                                        <Link
-                                            href={`/ideas/${idea.id}#feedback`}
-                                            className="flex items-center gap-1 text-xs font-bold text-gray-500 hover:text-indigo-500 transition-colors"
-                                        >
-                                            <MessageSquare size={15} />
-                                            <span>{idea.commentsCount || 0}</span>
-                                        </Link>
-                                    </div>
-
-                                    <Link 
-                                        href={`/ideas/${idea.id}`}
-                                        className="py-2 px-4 bg-gray-50 text-indigo-600 text-xs text-center"
-                                    >
-                                        View Details
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
+                        <IdeaCard key={idea.id} idea={idea} onLike={likeIdea} />
                     ))}
                 </div>
             ) : (

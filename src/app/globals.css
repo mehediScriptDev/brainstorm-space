@@ -42,13 +42,15 @@
   }
 
   .bg-indigo-500,
-  .bg-indigo-600,
+  .bg-indigo-600 {
+    background-color: var(--color-custom) !important;
+  }
+
   .border-indigo-500,
   .border-indigo-600,
   .dark .dark\:border-indigo-400,
   .dark .dark\:border-indigo-500 {
     border-color: var(--color-custom) !important;
-    background-color: var(--color-custom);
   }
 
   .hover\:bg-indigo-700:hover,
