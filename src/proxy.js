@@ -22,8 +22,8 @@ export function proxy(request) {
 
 export const config = {
   matcher: [
-    '/add-idea',
-    '/my-ideas',
+    // '/add-idea',
+    // '/my-ideas',
     '/my-interactions',
     '/ideas/:id/edit'
   ]

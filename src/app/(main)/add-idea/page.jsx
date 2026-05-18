@@ -43,7 +43,6 @@ export default function AddIdeaPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setSubmitting(true);
 
         const tags = tagsString
             .split(",")
@@ -63,10 +62,31 @@ export default function AddIdeaPage() {
             tags
         };
 
-        const success = addIdea(ideaData);
-        setSubmitting(false);
-        if (success) {
-            router.push("/my-ideas");
+        setSubmitting(true);
+        try {
+            const res = await fetch("http://localhost:8000/api/ideas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(ideaData),
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to submit idea");
+            }
+
+            const data = await res.json();
+            console.log(data);
+
+            const success = addIdea(ideaData);
+            if (success) {
+                router.push("/my-ideas");
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setSubmitting(false);
         }
     };
 
