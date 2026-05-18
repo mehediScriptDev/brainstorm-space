@@ -22,6 +22,11 @@ export default function MyInteractionsPage() {
         document.title = "Interactions | IdeaVault";
     }, []);
 
+    // Filter comments authored by this user
+    const myComments = useMemo(() => {
+        return activeUser ? comments.filter((c) => c.authorEmail === activeUser.email) : [];
+    }, [comments, activeUser]);
+
     if (isLoading || !activeUser) {
         return (
             <div className="min-h-[80vh] w-full flex flex-col items-center justify-center bg-base-100">
@@ -30,11 +35,6 @@ export default function MyInteractionsPage() {
             </div>
         );
     }
-
-    // Filter comments authored by this user
-    const myComments = useMemo(() => {
-        return comments.filter((c) => c.authorEmail === activeUser.email);
-    }, [comments, activeUser.email]);
 
     return (
         <div className="max-w-4xl mx-auto px-4 py-10 animate-fade-in text-left">
