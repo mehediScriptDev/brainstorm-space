@@ -28,7 +28,7 @@ const HowItWorks = () => {
     ];
 
     return (
-        <section id="how-it-works" className="py-16 bg-gray-50 dark:bg-gray-850 transition-colors">
+        <section id="how-it-works" className="py-16 bg-gray-50 dark:bg-gray-900 transition-colors">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
@@ -43,7 +43,7 @@ const HowItWorks = () => {
                     {steps.map((step, index) => (
                         <div
                             key={index}
-                            className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md border border-gray-150 dark:border-gray-700 hover:shadow-lg transition-shadow text-left flex flex-col items-start"
+                            className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow text-left flex flex-col items-start"
                         >
                             <div className="h-12 w-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4.5">
                                 {step.icon}

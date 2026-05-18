@@ -1,11 +1,21 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import { Lightbulb } from "lucide-react";
 
 const Footer = () => {
+    const [showComingSoonModal, setShowComingSoonModal] = useState(false);
+
+    const handleComingSoonClick = (event) => {
+        event.preventDefault();
+        setShowComingSoonModal(true);
+    };
+
     return (
-        <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 pt-12 pb-8 mt-auto transition-colors">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <>
+            <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 pt-12 pb-8 mt-auto transition-colors">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-left">
                     <div className="col-span-1 md:col-span-2 space-y-4">
                         <div className="flex items-center">
@@ -47,12 +57,14 @@ const Footer = () => {
                             Contact & Social
                         </h4>
                         <ul className="space-y-2 text-sm text-gray-500 dark:text-gray-400 font-medium">
-                            <li>support@ideavault.com</li>
-                            <li>+1 (555) 123-4567</li>
+                            <li>meheduvau@gmail.com</li>
+                            <li>01834393787</li>
                         </ul>
                         <div className="flex space-x-4 mt-4">
                             <a
-                                href="#"
+                                href="https://github.com/mehediScriptDev"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                                 aria-label="GitHub"
                             >
@@ -61,7 +73,9 @@ const Footer = () => {
                                 </svg>
                             </a>
                             <a
-                                href="#"
+                                href="https://x.com/mehediscriptdev"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                                 aria-label="X (Twitter)"
                             >
@@ -76,16 +90,37 @@ const Footer = () => {
                 <div className="border-t border-gray-200 dark:border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs font-semibold text-gray-500 dark:text-gray-400 gap-4">
                     <p>&copy; {new Date().getFullYear()} IdeaVault. All rights reserved.</p>
                     <div className="flex space-x-6">
-                        <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                        <a href="#" onClick={handleComingSoonClick} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                             Privacy Policy
                         </a>
-                        <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                        <a href="#" onClick={handleComingSoonClick} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                             Terms of Service
                         </a>
                     </div>
                 </div>
-            </div>
-        </footer>
+                </div>
+            </footer>
+
+            {showComingSoonModal && (
+                <div className="fixed inset-0 z-9998 flex items-center justify-center bg-black/55 px-4">
+                    <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-2xl dark:border-gray-700 dark:bg-gray-900">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">Coming soon</h3>
+                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                            This page is currently under development and will be available soon.
+                        </p>
+                        <div className="mt-5 flex justify-end">
+                            <button
+                                type="button"
+                                onClick={() => setShowComingSoonModal(false)}
+                                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 

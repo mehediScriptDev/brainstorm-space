@@ -60,13 +60,13 @@ const Navbar = () => {
     );
 
     return (
-        <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-[99] transition-colors shadow-sm backdrop-blur-md bg-opacity-95 dark:bg-opacity-95">
+        <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-99 transition-colors shadow-sm backdrop-blur-md bg-opacity-95 dark:bg-opacity-95">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
                         <Link href="/" className="flex items-center cursor-pointer">
                             <Lightbulb className="h-8 w-8 text-indigo-600 dark:text-indigo-400 animate-pulse" />
-                            <span className="ml-2 text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 tracking-tight">
+                            <span className="ml-2 text-2xl font-extrabold bg-clip-text text-transparent bg-linear-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 tracking-tight">
                                 IdeaVault
                             </span>
                         </Link>
@@ -154,7 +154,7 @@ const Navbar = () => {
                             </div>
                             <ul
                                 tabIndex={0}
-                                className="menu menu-md dropdown-content bg-white dark:bg-gray-800 rounded-2xl z-[100] mt-3 w-56 p-3 shadow-2xl border border-gray-100 dark:border-gray-700 gap-1"
+                                className="menu menu-md dropdown-content bg-white dark:bg-gray-800 rounded-2xl z-100 mt-3 w-56 p-3 shadow-2xl border border-gray-100 dark:border-gray-700 gap-1"
                             >
                                 {links}
                                 <div className="border-t border-gray-100 dark:border-gray-700 my-2" />
@@ -184,7 +184,7 @@ const Navbar = () => {
             </div>
 
             {isProfileModalOpen && (
-                <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
+                <div className="fixed inset-0 z-1000 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
                     <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-100 dark:border-gray-700 relative animate-scale-in">
                         <button
                             onClick={() => setIsProfileModalOpen(false)}

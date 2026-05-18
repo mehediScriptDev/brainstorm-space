@@ -32,7 +32,7 @@ const Hero = () => {
     }, [slides.length]);
 
     return (
-        <section className="relative h-[500px] overflow-hidden bg-gray-900 transition-colors duration-200">
+        <section className="relative h-125 overflow-hidden bg-gray-900 transition-colors duration-200">
             {slides.map((slide, index) => (
                 <div 
                     key={index} 
