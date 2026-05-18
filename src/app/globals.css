@@ -1,6 +1,76 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
+@theme{
+  --color-custom:#3db4cc;
+}
+@layer {
+  .btn-custom {
+    @apply bg-custom btn rounded text-white hover:scale-105 transition-transform duration-200;
+  }
 
+  /* Premium Swiper Controls Styling */
+  .hero-swiper .swiper-button-next,
+  .hero-swiper .swiper-button-prev {
+    color: var(--color-custom) !important;
+    background: white !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  .hero-swiper .swiper-button-next:hover,
+  .hero-swiper .swiper-button-prev:hover {
+    background: var(--color-custom) !important;
+    color: white !important;
+    transform: scale(1.08) !important;
+    box-shadow: 0 20px 25px -5px rgba(61, 180, 204, 0.3) !important;
+  }
+
+  .hero-swiper .swiper-button-next::after,
+  .hero-swiper .swiper-button-prev::after {
+    font-size: 16px !important;
+    font-weight: 900 !important;
+  }
+
+  .hero-swiper .swiper-pagination {
+    bottom: -5px !important;
+  }
+
+  .hero-swiper .swiper-pagination-bullet {
+    background: rgba(0, 0, 0, 0.15) !important;
+    width: 8px !important;
+    height: 8px !important;
+    opacity: 0.8 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  .hero-swiper .swiper-pagination-bullet-active {
+    background: var(--color-custom) !important;
+    width: 24px !important;
+    border-radius: 9999px !important;
+    opacity: 1 !important;
+  }
+
+  /* Custom Toast Slide-In Animation */
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
 
 
 
