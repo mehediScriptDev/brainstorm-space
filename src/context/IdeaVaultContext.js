@@ -203,7 +203,6 @@ const initialComments = [
 export const IdeaVaultProvider = ({ children }) => {
     const router = useRouter();
 
-    // Core States
     const [ideas, setIdeas] = useState([]);
     const [comments, setComments] = useState([]);
     const [activeUser, setActiveUser] = useState(null);
@@ -212,16 +211,18 @@ export const IdeaVaultProvider = ({ children }) => {
     const [toasts, setToasts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Initial State Hydration (Persisted state via localStorage)
     useEffect(() => {
         setIsLoading(true);
         
-        // Hydrate Theme
         const storedTheme = localStorage.getItem("iv_theme") || "light";
         setTheme(storedTheme);
         document.documentElement.setAttribute("data-theme", storedTheme);
+        if (storedTheme === "dark") {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
 
-        // Hydrate Ideas
         const storedIdeas = localStorage.getItem("iv_ideas");
         if (storedIdeas) {
             setIdeas(JSON.parse(storedIdeas));
@@ -230,7 +231,6 @@ export const IdeaVaultProvider = ({ children }) => {
             localStorage.setItem("iv_ideas", JSON.stringify(initialIdeas));
         }
 
-        // Hydrate Comments
         const storedComments = localStorage.getItem("iv_comments");
         if (storedComments) {
             setComments(JSON.parse(storedComments));
@@ -239,14 +239,12 @@ export const IdeaVaultProvider = ({ children }) => {
             localStorage.setItem("iv_comments", JSON.stringify(initialComments));
         }
 
-        // Hydrate User Session (Simulate JWT token storage)
         const storedUser = localStorage.getItem("iv_user");
         const storedToken = localStorage.getItem("iv_token");
         if (storedUser && storedToken) {
             setActiveUser(JSON.parse(storedUser));
             setToken(storedToken);
         } else {
-            // Default Seed Admin User Session to facilitate testing
             const defaultUser = {
                 name: "Sarah Jenkins",
                 email: "admin@ideavault.com",
@@ -262,16 +260,19 @@ export const IdeaVaultProvider = ({ children }) => {
         setIsLoading(false);
     }, []);
 
-    // Theme Switcher Function
     const toggleTheme = () => {
         const nextTheme = theme === "light" ? "dark" : "light";
         setTheme(nextTheme);
         localStorage.setItem("iv_theme", nextTheme);
         document.documentElement.setAttribute("data-theme", nextTheme);
+        if (nextTheme === "dark") {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
         showToast(`Switched to ${nextTheme} mode`, "info");
     };
 
-    // Elegant Toast Notification System (React 19 Safe)
     const showToast = (message, type = "success") => {
         const newToast = {
             id: Date.now() + Math.random().toString(36).substr(2, 9),
@@ -280,28 +281,23 @@ export const IdeaVaultProvider = ({ children }) => {
         };
         setToasts((prev) => [...prev, newToast]);
 
-        // Auto remove toast after 3.5 seconds
         setTimeout(() => {
             setToasts((prev) => prev.filter((t) => t.id !== newToast.id));
         }, 3500);
     };
 
-    // Simulating JWT Auth Token generation
     const generateMockJWT = (email, name) => {
         return `mock_jwt_${btoa(JSON.stringify({ email, name, exp: Date.now() + 3600000 }))}`;
     };
 
-    // User Login
     const login = (email, password) => {
         setIsLoading(true);
-        // Standard user verification mockup
         if (!email || !password) {
             showToast("Please enter email and password", "error");
             setIsLoading(false);
             return false;
         }
 
-        // Mock accounts verification
         let foundUser = {
             name: email.split("@")[0].charAt(0).toUpperCase() + email.split("@")[0].slice(1),
             email: email,
@@ -329,7 +325,6 @@ export const IdeaVaultProvider = ({ children }) => {
         return true;
     };
 
-    // Google Login Simulation
     const loginWithGoogle = () => {
         setIsLoading(true);
         const googleUser = {
@@ -350,11 +345,9 @@ export const IdeaVaultProvider = ({ children }) => {
         return true;
     };
 
-    // User Registration
     const register = (name, email, photoUrl, password) => {
         setIsLoading(true);
         
-        // Strict Validation
         if (!name || !email || !password) {
             showToast("All fields are required", "error");
             setIsLoading(false);
@@ -392,7 +385,6 @@ export const IdeaVaultProvider = ({ children }) => {
         return true;
     };
 
-    // Profile Management Updates
     const updateProfile = (name, photoUrl) => {
         if (!activeUser) return false;
 
@@ -405,7 +397,6 @@ export const IdeaVaultProvider = ({ children }) => {
         setActiveUser(updatedUser);
         localStorage.setItem("iv_user", JSON.stringify(updatedUser));
 
-        // Update name inside comments as well for coherence
         const updatedComments = comments.map(c => {
             if (c.authorEmail === activeUser.email) {
                 return { ...c, authorName: updatedUser.name, authorPhoto: updatedUser.photoUrl };
@@ -415,7 +406,6 @@ export const IdeaVaultProvider = ({ children }) => {
         setComments(updatedComments);
         localStorage.setItem("iv_comments", JSON.stringify(updatedComments));
 
-        // Update name inside ideas
         const updatedIdeas = ideas.map(idea => {
             if (idea.authorEmail === activeUser.email) {
                 return { ...idea, authorName: updatedUser.name };
@@ -429,7 +419,6 @@ export const IdeaVaultProvider = ({ children }) => {
         return true;
     };
 
-    // User Logout
     const logout = () => {
         setActiveUser(null);
         setToken(null);
@@ -439,7 +428,6 @@ export const IdeaVaultProvider = ({ children }) => {
         router.push("/");
     };
 
-    // CREATE Idea
     const addIdea = (ideaData) => {
         if (!activeUser) {
             showToast("You must be logged in to submit ideas", "error");
@@ -464,7 +452,6 @@ export const IdeaVaultProvider = ({ children }) => {
         return true;
     };
 
-    // UPDATE Idea
     const updateIdea = (id, updatedData) => {
         const targetIdea = ideas.find(i => i.id === id);
         if (!targetIdea) {
@@ -491,7 +478,6 @@ export const IdeaVaultProvider = ({ children }) => {
         return true;
     };
 
-    // DELETE Idea
     const deleteIdea = (id) => {
         const targetIdea = ideas.find(i => i.id === id);
         if (!targetIdea) {
@@ -508,7 +494,6 @@ export const IdeaVaultProvider = ({ children }) => {
         setIdeas(filteredIdeas);
         localStorage.setItem("iv_ideas", JSON.stringify(filteredIdeas));
 
-        // Filter out associated comments as well
         const filteredComments = comments.filter(c => c.ideaId !== id);
         setComments(filteredComments);
         localStorage.setItem("iv_comments", JSON.stringify(filteredComments));
@@ -517,7 +502,6 @@ export const IdeaVaultProvider = ({ children }) => {
         return true;
     };
 
-    // Simulating Like/Validation interaction
     const likeIdea = (id) => {
         if (!activeUser) {
             showToast("Log in to validate this idea!", "error");
@@ -534,7 +518,6 @@ export const IdeaVaultProvider = ({ children }) => {
         showToast("Idea validation recorded!", "success");
     };
 
-    // ADD Comment
     const addComment = (ideaId, text) => {
         if (!activeUser) {
             showToast("Log in to leave feedback", "error");
@@ -560,7 +543,6 @@ export const IdeaVaultProvider = ({ children }) => {
         setComments(updatedComments);
         localStorage.setItem("iv_comments", JSON.stringify(updatedComments));
 
-        // Increment comment count in target idea
         const updatedIdeas = ideas.map(i => {
             if (i.id === ideaId) {
                 return { ...i, commentsCount: (i.commentsCount || 0) + 1 };
@@ -574,7 +556,6 @@ export const IdeaVaultProvider = ({ children }) => {
         return true;
     };
 
-    // EDIT Comment
     const editComment = (id, newText) => {
         const targetComment = comments.find(c => c.id === id);
         if (!targetComment) {
@@ -605,7 +586,6 @@ export const IdeaVaultProvider = ({ children }) => {
         return true;
     };
 
-    // DELETE Comment
     const deleteComment = (id, ideaId) => {
         const targetComment = comments.find(c => c.id === id);
         if (!targetComment) {
@@ -622,7 +602,6 @@ export const IdeaVaultProvider = ({ children }) => {
         setComments(filteredComments);
         localStorage.setItem("iv_comments", JSON.stringify(filteredComments));
 
-        // Decrement comment count in target idea
         const updatedIdeas = ideas.map(i => {
             if (i.id === ideaId) {
                 return { ...i, commentsCount: Math.max(0, (i.commentsCount || 1) - 1) };

@@ -7,16 +7,14 @@ import { useIdeaVault } from "@/context/IdeaVaultContext";
 
 export default function RegisterPage() {
     const router = useRouter();
-    const { registerUser, activeUser } = useIdeaVault();
+    const { register, activeUser } = useIdeaVault();
 
-    // Form States
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [photoUrl, setPhotoUrl] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // Dynamic Title
     useEffect(() => {
         document.title = "Register | IdeaVault";
         if (activeUser) {
@@ -27,7 +25,7 @@ export default function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const success = registerUser(name, email, photoUrl, password);
+        const success = register(name, email, photoUrl, password);
         setLoading(false);
         if (success) {
             router.push("/");
@@ -38,7 +36,6 @@ export default function RegisterPage() {
         <div className="min-h-[70vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-base-100 transition-colors duration-200">
             <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 animate-slide-in">
                 
-                {/* Header */}
                 <div className="text-center">
                     <h2 className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                         Create an Account
@@ -48,7 +45,6 @@ export default function RegisterPage() {
                     </p>
                 </div>
 
-                {/* Form */}
                 <form className="mt-8 space-y-5 text-left" onSubmit={handleSubmit}>
                     <div className="form-control">
                         <label className="block text-sm font-bold text-gray-700 dark:text-gray-300">
@@ -118,7 +114,6 @@ export default function RegisterPage() {
                     </button>
                 </form>
 
-                {/* Redirect Footer */}
                 <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400 font-semibold">
                     Already have an account?{" "}
                     <Link

@@ -23,20 +23,17 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
         deleteComment 
     } = useIdeaVault();
 
-    // Local States
     const [idea, setIdea] = useState(null);
     const [newCommentText, setNewCommentText] = useState("");
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editingCommentText, setEditingCommentText] = useState("");
 
-    // Private Route Security & Hydration
     useEffect(() => {
         if (!isLoading && !activeUser) {
             router.push("/login");
         }
     }, [activeUser, isLoading, router]);
 
-    // Retrieve Idea Details and dynamic title
     useEffect(() => {
         if (ideas.length > 0) {
             const foundIdea = ideas.find((i) => i.id === params.id);
@@ -58,7 +55,6 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
         );
     }
 
-    // Filter and sort comments belonging to this idea
     const ideaComments = comments
         .filter((c) => c.ideaId === idea.id)
         .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
@@ -87,7 +83,6 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
     return (
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-fade-in text-left">
             
-            {/* Navigation back row */}
             <div className="mb-6 flex justify-start">
                 <Link href="/ideas" className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-indigo-600 transition-colors">
                     <ArrowLeft size={16} />
@@ -95,7 +90,6 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                 </Link>
             </div>
 
-            {/* Banner Cover Header Section */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden mb-10">
                 <div className="h-64 md:h-96 w-full relative">
                     <img 
@@ -118,7 +112,6 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                     </div>
                 </div>
 
-                {/* Profile card row */}
                 <div className="p-6 md:p-8">
                     <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
                         <div className="flex items-center space-x-3">
@@ -142,10 +135,8 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                         </div>
                     </div>
 
-                    {/* 2-Column Grid specs */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         
-                        {/* Left column specifications */}
                         <div className="md:col-span-2 space-y-8">
                             <section className="text-left space-y-3">
                                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Problem Statement</h3>
@@ -169,7 +160,6 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                             </section>
                         </div>
                         
-                        {/* Right column: Quick facts sidebar */}
                         <div className="space-y-6">
                             <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-750 text-left">
                                 <h4 className="font-bold text-gray-900 dark:text-white mb-4 text-base border-b border-gray-200 dark:border-gray-800 pb-2.5 uppercase tracking-wider">
@@ -199,7 +189,6 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                                     </li>
                                 </ul>
 
-                                {/* Action to support */}
                                 <div className="mt-6">
                                     <button
                                         onClick={() => likeIdea(idea.id)}
@@ -215,14 +204,12 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                 </div>
             </div>
 
-            {/* Comment Discussion Section */}
             <div id="feedback" className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 md:p-8 text-left">
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center tracking-tight">
                     <MessageSquare className="mr-2.5 text-indigo-500" /> 
                     Discussion ({ideaComments.length})
                 </h3>
                 
-                {/* Submit Feedback Form */}
                 <form onSubmit={handleAddComment} className="mb-8">
                     <textarea 
                         required
@@ -240,7 +227,6 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                     </button>
                 </form>
 
-                {/* Comments List */}
                 <div className="space-y-6">
                     {ideaComments.length > 0 ? (
                         ideaComments.map((comment) => (
@@ -258,7 +244,6 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                                             <span className="text-[10px] text-gray-400 font-bold">{new Date(comment.timestamp).toLocaleString()}</span>
                                         </div>
                                         
-                                        {/* Actions only for comment owner */}
                                         {comment.authorEmail === activeUser.email && (
                                             <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button 
@@ -280,7 +265,6 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                                     </div>
 
                                     {editingCommentId === comment.id ? (
-                                        /* Inline Editing Box */
                                         <form onSubmit={(e) => { e.preventDefault(); handleSaveEdit(comment.id); }} className="mt-2 text-left space-y-2">
                                             <input 
                                                 type="text" 
@@ -295,7 +279,6 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                                             </div>
                                         </form>
                                     ) : (
-                                        /* Standard Comment Text */
                                         <p className="text-gray-700 dark:text-gray-300 text-sm mt-1 font-medium leading-relaxed">
                                             {comment.text}
                                         </p>

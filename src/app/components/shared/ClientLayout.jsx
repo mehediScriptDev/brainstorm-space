@@ -8,7 +8,6 @@ export default function ClientLayout({ children }) {
 
     return (
         <>
-            {/* Elegant, Custom Animated Toasts */}
             {toasts && toasts.length > 0 && (
                 <div className="fixed top-6 right-6 z-[9999] flex flex-col gap-3 max-w-sm w-full pointer-events-none">
                     {toasts.map((toast) => (

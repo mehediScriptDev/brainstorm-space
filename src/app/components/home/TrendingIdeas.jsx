@@ -8,13 +8,11 @@ import { User, Target, Heart, MessageSquare } from "lucide-react";
 const TrendingIdeas = () => {
     const { ideas, likeIdea } = useIdeaVault();
 
-    // Display first 6 ideas as trending
     const trendingList = ideas.slice(0, 6);
 
     return (
         <section id="trending" className="py-16 bg-white dark:bg-gray-900 transition-colors">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Section Header */}
                 <div className="flex items-center justify-between mb-10 text-left">
                     <div>
                         <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white flex items-center tracking-tight">
@@ -33,14 +31,12 @@ const TrendingIdeas = () => {
                     </Link>
                 </div>
 
-                {/* Ideas Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {trendingList.map((idea) => (
                         <div
                             key={idea.id}
                             className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col h-full transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                         >
-                            {/* Image Header & Category Badge */}
                             <div className="h-48 w-full overflow-hidden relative bg-gray-200 dark:bg-gray-700">
                                 <img
                                     src={idea.imageUrl}
@@ -55,7 +51,6 @@ const TrendingIdeas = () => {
                                 </div>
                             </div>
 
-                            {/* Card Body */}
                             <div className="p-6 flex-grow flex flex-col text-left">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">
                                     {idea.title}
@@ -64,7 +59,6 @@ const TrendingIdeas = () => {
                                     {idea.shortDescription}
                                 </p>
 
-                                {/* Meta details with Lucide icons */}
                                 <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4 space-x-4 font-semibold">
                                     <span className="flex items-center">
                                         <User size={16} className="mr-1.5 text-indigo-500" />
@@ -76,7 +70,6 @@ const TrendingIdeas = () => {
                                     </span>
                                 </div>
 
-                                {/* Likes & Comments counter row */}
                                 <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-4 mt-2">
                                     <div className="flex items-center gap-3">
                                         <button

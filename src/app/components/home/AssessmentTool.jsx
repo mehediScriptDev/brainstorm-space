@@ -19,15 +19,12 @@ const AssessmentTool = () => {
         setIsAnalyzing(true);
         setResult(null);
 
-        // Simulate analytical delay
         setTimeout(() => {
-            // Calculated mock scores based on inputs
             let score = 70;
             if (hasComp) score += 10;
             if (isDefined) score += 15;
             if (stage === "prototype") score += 5;
             
-            // Constrain
             score = Math.min(score, 98);
 
             const marketSizes = {
@@ -62,7 +59,6 @@ const AssessmentTool = () => {
         <section className="py-20 bg-base-200 border-y border-base-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-                    {/* Left Copy */}
                     <div className="space-y-6 text-left">
                         <span className="inline-flex rounded-full border border-custom/15 bg-custom/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-custom">
                             Instant Market Signal
@@ -88,13 +84,11 @@ const AssessmentTool = () => {
                         </div>
                     </div>
 
-                    {/* Right Interactive Form Box */}
                     <div className="relative">
                         <div className="absolute inset-0 -z-10 scale-95 bg-custom/10 blur-3xl rounded-4xl opacity-75" />
 
                         <div className="rounded-4xl border border-base-300/70 bg-base-100 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
                             {!result && !isAnalyzing ? (
-                                /* Input State */
                                 <form onSubmit={handleAssess} className="space-y-5">
                                     <div className="form-control">
                                         <label className="label text-sm font-bold text-base-content/70">Idea Title</label>
@@ -138,7 +132,6 @@ const AssessmentTool = () => {
                                         </div>
                                     </div>
 
-                                    {/* Parameter Switches */}
                                     <div className="space-y-3.5 bg-base-200/50 p-4.5 rounded-2xl border border-base-200">
                                         <div className="flex items-center justify-between">
                                             <div className="pr-2">
@@ -175,7 +168,6 @@ const AssessmentTool = () => {
                                     </button>
                                 </form>
                             ) : isAnalyzing ? (
-                                /* Loading / Processing State */
                                 <div className="h-96 flex flex-col items-center justify-center text-center space-y-6">
                                     <div className="relative">
                                         <div className="h-16 w-16 rounded-full border-4 border-base-200 border-t-custom animate-spin" />
@@ -187,11 +179,9 @@ const AssessmentTool = () => {
                                     </div>
                                 </div>
                             ) : (
-                                /* Result State */
                                 <div className="space-y-6 text-center py-4">
                                     <h3 className="text-2xl font-black text-base-content leading-tight">Your Idea Analysis</h3>
                                     
-                                    {/* Circular Rating Score */}
                                     <div className="flex justify-center pt-2">
                                         <div className="relative h-32 w-32 rounded-full border-8 border-base-200 flex flex-col items-center justify-center bg-base-200/25">
                                             <span className="text-3xl font-black text-custom leading-none">{result.score}%</span>
@@ -199,7 +189,6 @@ const AssessmentTool = () => {
                                         </div>
                                     </div>
 
-                                    {/* Analytics breakdown */}
                                     <div className="grid gap-3 sm:grid-cols-2 text-left pt-2">
                                         <div className="rounded-2xl border border-base-200 p-4 bg-base-200/30">
                                             <span className="text-xs uppercase font-extrabold text-base-content/40">Market Size Est.</span>

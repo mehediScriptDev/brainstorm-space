@@ -63,7 +63,6 @@ const Navbar = () => {
         <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-[99] transition-colors shadow-sm backdrop-blur-md bg-opacity-95 dark:bg-opacity-95">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
-                    {/* Logo Section */}
                     <div className="flex items-center">
                         <Link href="/" className="flex items-center cursor-pointer">
                             <Lightbulb className="h-8 w-8 text-indigo-600 dark:text-indigo-400 animate-pulse" />
@@ -73,13 +72,11 @@ const Navbar = () => {
                         </Link>
                     </div>
 
-                    {/* Desktop Navigation Links */}
                     <div className="hidden md:flex items-center space-x-4">
                         <ul className="flex items-center space-x-2 font-medium menu menu-horizontal p-0">
                             {links}
                         </ul>
 
-                        {/* Theme Toggle */}
                         <button
                             onClick={toggleTheme}
                             className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
@@ -88,7 +85,6 @@ const Navbar = () => {
                             {theme === "dark" ? <Sun size={20} className="text-indigo-400" /> : <Moon size={20} className="text-gray-500" />}
                         </button>
 
-                        {/* User Authentication Display */}
                         {activeUser ? (
                             <div className="relative">
                                 <button
@@ -145,7 +141,6 @@ const Navbar = () => {
                         )}
                     </div>
 
-                    {/* Mobile menu and toggle */}
                     <div className="flex md:hidden items-center space-x-2">
                         <button
                             onClick={toggleTheme}
@@ -188,7 +183,6 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* Profile Update Modal */}
             {isProfileModalOpen && (
                 <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
                     <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-100 dark:border-gray-700 relative animate-scale-in">

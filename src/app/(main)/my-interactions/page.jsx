@@ -10,19 +10,16 @@ export default function MyInteractionsPage() {
     const router = useRouter();
     const { ideas, comments, activeUser, isLoading } = useIdeaVault();
 
-    // Private Route Security & Hydration
     useEffect(() => {
         if (!isLoading && !activeUser) {
             router.push("/login");
         }
     }, [activeUser, isLoading, router]);
 
-    // Dynamic Title
     useEffect(() => {
         document.title = "Interactions | IdeaVault";
     }, []);
 
-    // Filter comments authored by this user
     const myComments = useMemo(() => {
         return activeUser ? comments.filter((c) => c.authorEmail === activeUser.email) : [];
     }, [comments, activeUser]);
@@ -39,7 +36,6 @@ export default function MyInteractionsPage() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-10 animate-fade-in text-left">
             
-            {/* Header Title & Icon */}
             <div className="mb-10 border-b border-gray-200 dark:border-gray-700 pb-5 flex items-center">
                 <MessageSquare className="h-8 w-8 mr-3 text-indigo-600 dark:text-indigo-400" />
                 <div>
@@ -48,11 +44,9 @@ export default function MyInteractionsPage() {
                 </div>
             </div>
 
-            {/* Interactions List */}
             <div className="space-y-4">
                 {myComments.length > 0 ? (
                     myComments.map((comment) => {
-                        // Find matching idea title
                         const idea = ideas.find((i) => i.id === comment.ideaId);
                         const ideaTitle = idea ? idea.title : "Deleted Idea";
 
@@ -76,7 +70,6 @@ export default function MyInteractionsPage() {
                                     </span>
                                 </div>
 
-                                {/* Custom Indigo Left-Banded Callout */}
                                 <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border-l-4 border-indigo-500 italic text-gray-700 dark:text-gray-300 text-sm mt-3 font-semibold leading-relaxed">
                                     "{comment.text}"
                                 </div>
@@ -84,7 +77,6 @@ export default function MyInteractionsPage() {
                         );
                     })
                 ) : (
-                    /* Empty dashboard */
                     <div className="text-center py-16 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
                         <MessageSquare className="mx-auto h-12 w-12 text-gray-400 mb-3 animate-pulse" />
                         <p className="text-gray-500 dark:text-gray-400 text-lg font-bold">You haven't commented on any ideas yet.</p>

@@ -4,20 +4,17 @@ import React, { useEffect } from "react";
 import Link from "next/link";
 
 export default function NotFound() {
-    // Dynamic Title
     useEffect(() => {
         document.title = "404 - Concept Lost | IdeaVault";
     }, []);
 
     return (
         <div className="min-h-[85vh] flex flex-col items-center justify-center px-4 py-16 bg-base-100 text-center relative overflow-hidden">
-            {/* Blurry decorative background blobs */}
             <div className="absolute top-1/4 left-1/4 h-72 w-72 bg-custom/10 rounded-full blur-3xl -z-10 scale-95" />
             <div className="absolute bottom-1/4 right-1/4 h-72 w-72 bg-rose-500/5 rounded-full blur-3xl -z-10 scale-95" />
 
             <div className="max-w-md space-y-6 relative">
                 
-                {/* 404 Illustration */}
                 <div className="text-8xl animate-bounce">🚀</div>
 
                 <div className="space-y-2.5">

@@ -42,17 +42,14 @@ const Hero = () => {
                             : "opacity-0 scale-105 z-0 pointer-events-none"
                     }`}
                 >
-                    {/* Dark gradient overlay */}
                     <div className="absolute inset-0 bg-black/65 z-10" />
                     
-                    {/* Slide image */}
                     <img 
                         src={slide.img} 
                         alt={slide.title} 
                         className="w-full h-full object-cover" 
                     />
 
-                    {/* Centered content block */}
                     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
                         <span className="inline-flex rounded-full border border-indigo-400/20 bg-indigo-500/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-indigo-300 mb-4.5 backdrop-blur-xs">
                             IdeaVault Hub
@@ -76,7 +73,6 @@ const Hero = () => {
                 </div>
             ))}
 
-            {/* Navigation Bullets */}
             <div className="absolute bottom-6 left-0 right-0 z-30 flex justify-center space-x-2.5">
                 {slides.map((_, idx) => (
                     <button 

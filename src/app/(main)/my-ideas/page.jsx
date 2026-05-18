@@ -1,33 +1,28 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useIdeaVault } from "@/context/IdeaVaultContext";
-import { Trash2, Edit, X, AlertCircle } from "lucide-react";
 
 export default function MyIdeasPage() {
     const router = useRouter();
     const { ideas, activeUser, isLoading, updateIdea, deleteIdea } = useIdeaVault();
 
-    // Private Route Security & Hydration
     useEffect(() => {
         if (!isLoading && !activeUser) {
             router.push("/login");
         }
     }, [activeUser, isLoading, router]);
 
-    // Dynamic Title
     useEffect(() => {
         document.title = "My Ideas | IdeaVault";
     }, []);
 
-    // Modal Control States
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [selectedIdea, setSelectedIdea] = useState(null);
 
-    // Edit Form States
     const [editTitle, setEditTitle] = useState("");
     const [editShortDescription, setEditShortDescription] = useState("");
     const [editCategory, setEditCategory] = useState("Tech");
@@ -41,10 +36,8 @@ export default function MyIdeasPage() {
         );
     }
 
-    // Filter ideas posted by active user in JS memory
     const myIdeas = ideas.filter((idea) => idea.authorEmail === activeUser.email);
 
-    // Open Edit Modal & Populate Fields
     const handleOpenEdit = (idea) => {
         setSelectedIdea(idea);
         setEditTitle(idea.title);
@@ -53,7 +46,6 @@ export default function MyIdeasPage() {
         setEditModalOpen(true);
     };
 
-    // Save Edit Submit
     const handleEditSubmit = (e) => {
         e.preventDefault();
         const updatedData = {
@@ -68,13 +60,11 @@ export default function MyIdeasPage() {
         }
     };
 
-    // Open Delete Modal
     const handleOpenDelete = (idea) => {
         setSelectedIdea(idea);
         setDeleteModalOpen(true);
     };
 
-    // Confirm Delete Handler
     const handleConfirmDelete = () => {
         const success = deleteIdea(selectedIdea.id);
         if (success) {
@@ -86,13 +76,11 @@ export default function MyIdeasPage() {
     return (
         <div className="max-w-7xl mx-auto px-4 py-10 animate-fade-in text-left">
             
-            {/* Header Title */}
             <div className="mb-10 border-b border-gray-250 dark:border-gray-700 pb-5">
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Ideas Dashboard</h1>
                 <p className="text-gray-600 dark:text-gray-400 mt-2 font-medium">Manage the startup concepts you have shared with the community.</p>
             </div>
 
-            {/* Dashboard Table */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -154,7 +142,6 @@ export default function MyIdeasPage() {
                         </tbody>
                     </table>
                     
-                    {/* Empty state dashboard */}
                     {myIdeas.length === 0 && (
                         <div className="text-center py-12 text-gray-500 dark:text-gray-400 font-semibold text-sm">
                             You haven't posted any ideas yet.
@@ -163,7 +150,6 @@ export default function MyIdeasPage() {
                 </div>
             </div>
 
-            {/* DELETE CONFIRMATION MODAL */}
             {deleteModalOpen && (
                 <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
                     <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-100 dark:border-gray-700 text-center space-y-4 animate-scale-in">
@@ -175,7 +161,7 @@ export default function MyIdeasPage() {
                         <div className="flex gap-3 pt-3">
                             <button 
                                 onClick={() => setDeleteModalOpen(false)} 
-                                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-750 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 flex-1 font-bold text-xs"
+                                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-755 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 flex-1 font-bold text-xs"
                             >
                                 Cancel
                             </button>
@@ -190,7 +176,6 @@ export default function MyIdeasPage() {
                 </div>
             )}
 
-            {/* EDIT UPDATE MODAL */}
             {editModalOpen && (
                 <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
                     <div className="w-full max-w-lg bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-100 dark:border-gray-700 relative animate-scale-in">
@@ -205,7 +190,7 @@ export default function MyIdeasPage() {
 
                         <form onSubmit={handleEditSubmit} className="space-y-4 mt-6">
                             <div className="form-control text-left">
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Title</label>
+                                <label className="block text-xs font-bold text-gray-505 uppercase tracking-wider mb-1">Title</label>
                                 <input 
                                     required 
                                     type="text" 
@@ -216,7 +201,7 @@ export default function MyIdeasPage() {
                             </div>
 
                             <div className="form-control text-left">
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Short Description</label>
+                                <label className="block text-xs font-bold text-gray-550 uppercase tracking-wider mb-1">Short Description</label>
                                 <input 
                                     required 
                                     type="text" 
@@ -227,7 +212,7 @@ export default function MyIdeasPage() {
                             </div>
 
                             <div className="form-control text-left">
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Category</label>
+                                <label className="block text-xs font-bold text-gray-560 uppercase tracking-wider mb-1">Category</label>
                                 <select 
                                     value={editCategory} 
                                     onChange={(e) => setEditCategory(e.target.value)} 
@@ -243,7 +228,7 @@ export default function MyIdeasPage() {
                                 <button 
                                     type="button" 
                                     onClick={() => setEditModalOpen(false)} 
-                                    className="px-4 py-2.5 border border-gray-300 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 font-bold text-xs"
+                                    className="px-4 py-2.5 border border-gray-300 rounded-lg text-gray-750 dark:text-gray-300 hover:bg-gray-50 font-bold text-xs"
                                 >
                                     Cancel
                                 </button>

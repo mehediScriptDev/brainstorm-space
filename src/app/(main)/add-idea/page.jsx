@@ -8,19 +8,6 @@ export default function AddIdeaPage() {
     const router = useRouter();
     const { addIdea, activeUser, isLoading } = useIdeaVault();
 
-    // Private Route Security & Hydration
-    useEffect(() => {
-        if (!isLoading && !activeUser) {
-            router.push("/login");
-        }
-    }, [activeUser, isLoading, router]);
-
-    // Dynamic Title
-    useEffect(() => {
-        document.title = "Post Idea | IdeaVault";
-    }, []);
-
-    // Form States
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("Tech");
     const [shortDescription, setShortDescription] = useState("");
@@ -35,6 +22,16 @@ export default function AddIdeaPage() {
 
     const categories = ["Tech", "Health", "AI", "Education", "Finance", "E-commerce", "Other"];
 
+    useEffect(() => {
+        if (!isLoading && !activeUser) {
+            router.push("/login");
+        }
+    }, [activeUser, isLoading, router]);
+
+    useEffect(() => {
+        document.title = "Post Idea | IdeaVault";
+    }, []);
+
     if (isLoading || !activeUser) {
         return (
             <div className="min-h-[80vh] w-full flex flex-col items-center justify-center bg-base-100">
@@ -48,7 +45,6 @@ export default function AddIdeaPage() {
         e.preventDefault();
         setSubmitting(true);
 
-        // Process tags array
         const tags = tagsString
             .split(",")
             .map((t) => t.trim())
@@ -78,7 +74,6 @@ export default function AddIdeaPage() {
         <div className="max-w-4xl mx-auto px-4 py-10 animate-fade-in text-left">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                 
-                {/* Purple Card Header */}
                 <div className="bg-indigo-600 p-8 text-white text-left">
                     <h2 className="text-3xl font-bold mb-2">Share Your Startup Idea</h2>
                     <p className="text-indigo-100 font-semibold text-sm">
@@ -86,11 +81,9 @@ export default function AddIdeaPage() {
                     </p>
                 </div>
 
-                {/* Form fields layout */}
                 <form onSubmit={handleSubmit} className="p-8 space-y-6 text-left">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         
-                        {/* Title */}
                         <div className="col-span-1 md:col-span-2">
                             <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 Idea Title*
@@ -105,7 +98,6 @@ export default function AddIdeaPage() {
                             />
                         </div>
                         
-                        {/* Short pitch */}
                         <div className="col-span-1 md:col-span-2">
                             <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 Short Description*
@@ -121,7 +113,6 @@ export default function AddIdeaPage() {
                             />
                         </div>
 
-                        {/* Category Selector */}
                         <div className="form-control">
                             <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 Category*
@@ -135,7 +126,6 @@ export default function AddIdeaPage() {
                             </select>
                         </div>
 
-                        {/* Estimated Funding */}
                         <div className="form-control">
                             <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 Estimated Budget ($)
@@ -149,7 +139,6 @@ export default function AddIdeaPage() {
                             />
                         </div>
 
-                        {/* Image asset */}
                         <div className="col-span-1 md:col-span-2">
                             <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 Image URL*
@@ -164,7 +153,6 @@ export default function AddIdeaPage() {
                             />
                         </div>
 
-                        {/* Target segments */}
                         <div className="col-span-1 md:col-span-2">
                             <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 Target Audience*
@@ -179,7 +167,6 @@ export default function AddIdeaPage() {
                             />
                         </div>
 
-                        {/* Problem */}
                         <div className="col-span-1 md:col-span-2">
                             <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 Problem Statement*
@@ -194,7 +181,6 @@ export default function AddIdeaPage() {
                             />
                         </div>
 
-                        {/* Solution */}
                         <div className="col-span-1 md:col-span-2">
                             <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 Proposed Solution*
@@ -209,7 +195,6 @@ export default function AddIdeaPage() {
                             />
                         </div>
 
-                        {/* Detailed specifications */}
                         <div className="col-span-1 md:col-span-2">
                             <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 Detailed Description*
@@ -224,7 +209,6 @@ export default function AddIdeaPage() {
                             />
                         </div>
 
-                        {/* Meta tags */}
                         <div className="col-span-1 md:col-span-2">
                             <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 Tags (comma separated)
@@ -239,7 +223,6 @@ export default function AddIdeaPage() {
                         </div>
                     </div>
 
-                    {/* Form actions footer */}
                     <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                         <button 
                             type="submit" 

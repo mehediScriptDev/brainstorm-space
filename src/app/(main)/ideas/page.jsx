@@ -10,11 +10,9 @@ function IdeasContent() {
     const { ideas, likeIdea } = useIdeaVault();
     const searchParams = useSearchParams();
     
-    // States
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
 
-    // Initial Category from URL param
     useEffect(() => {
         const catParam = searchParams.get("category");
         if (catParam) {
@@ -22,10 +20,8 @@ function IdeasContent() {
         }
     }, [searchParams]);
 
-    // Categories list matching template
     const categories = ["Tech", "Health", "AI", "Education", "Finance", "E-commerce", "Other"];
 
-    // Search and Category Filter Logic (simulating regex/database queries in JS memory)
     const filteredIdeas = useMemo(() => {
         return ideas.filter((idea) => {
             const matchesSearch = idea.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -36,7 +32,6 @@ function IdeasContent() {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-fade-in text-left">
-            {/* Header */}
             <div className="mb-10 text-center space-y-4">
                 <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white">
                     Explore Innovations
@@ -46,7 +41,6 @@ function IdeasContent() {
                 </p>
             </div>
 
-            {/* Filter and Search Box */}
             <div className="flex flex-col md:flex-row gap-4 mb-10 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                 <div className="relative flex-grow">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -70,7 +64,6 @@ function IdeasContent() {
                 </div>
             </div>
 
-            {/* Grid Content */}
             {filteredIdeas.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-slide-in">
                     {filteredIdeas.map((idea) => (
@@ -78,7 +71,6 @@ function IdeasContent() {
                             key={idea.id}
                             className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col h-full transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                         >
-                            {/* Image section & category badge */}
                             <div className="h-48 w-full overflow-hidden relative bg-gray-200 dark:bg-gray-700">
                                 <img 
                                     src={idea.imageUrl} 
@@ -91,7 +83,6 @@ function IdeasContent() {
                                 </div>
                             </div>
 
-                            {/* Info body */}
                             <div className="p-6 flex-grow flex flex-col">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">
                                     {idea.title}
@@ -100,7 +91,6 @@ function IdeasContent() {
                                     {idea.shortDescription}
                                 </p>
                                 
-                                {/* Info inline metadata */}
                                 <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4 space-x-4 font-semibold">
                                     <span className="flex items-center">
                                         <User size={16} className="mr-1 text-indigo-500" /> 
@@ -112,7 +102,6 @@ function IdeasContent() {
                                     </span>
                                 </div>
 
-                                {/* Actions subrow */}
                                 <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-4 mt-2">
                                     <div className="flex items-center gap-3">
                                         <button
@@ -144,7 +133,6 @@ function IdeasContent() {
                     ))}
                 </div>
             ) : (
-                /* Empty state */
                 <div className="text-center py-20 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 max-w-xl mx-auto space-y-4">
                     <Lightbulb className="mx-auto h-16 w-16 text-gray-400" />
                     <h3 className="text-xl font-medium text-gray-900 dark:text-white">

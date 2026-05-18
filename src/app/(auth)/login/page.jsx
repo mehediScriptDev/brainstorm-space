@@ -9,12 +9,10 @@ export default function LoginPage() {
     const router = useRouter();
     const { login, loginWithGoogle, activeUser } = useIdeaVault();
 
-    // Form inputs
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // Dynamic Title
     useEffect(() => {
         document.title = "Login | IdeaVault";
         if (activeUser) {
@@ -43,7 +41,6 @@ export default function LoginPage() {
         <div className="min-h-[70vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-base-100 transition-colors duration-200">
             <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 animate-slide-in">
                 
-                {/* Header */}
                 <div className="text-center">
                     <h2 className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                         Welcome Back
@@ -53,7 +50,6 @@ export default function LoginPage() {
                     </p>
                 </div>
 
-                {/* Form */}
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     <div className="space-y-4 text-left">
                         <div className="form-control">
@@ -94,7 +90,6 @@ export default function LoginPage() {
                     </button>
                 </form>
 
-                {/* Divider */}
                 <div className="mt-6">
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
@@ -107,7 +102,6 @@ export default function LoginPage() {
                         </div>
                     </div>
 
-                    {/* Google OAuth Button */}
                     <button
                         onClick={handleGoogleLogin}
                         className="mt-6 w-full flex justify-center items-center py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-bold text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-750 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -122,7 +116,6 @@ export default function LoginPage() {
                     </button>
                 </div>
 
-                {/* Redirect Footer */}
                 <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400 font-semibold">
                     Don't have an account?{" "}
                     <Link
