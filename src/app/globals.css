@@ -6,6 +6,13 @@
 @theme {
   --color-custom: #3db4cc;
 }
+
+@layer base {
+  body {
+    font-family: var(--font-manrope), "Segoe UI", sans-serif;
+  }
+}
+
 @layer {
   /* Brand override: map legacy indigo utilities to the custom main color */
   .text-indigo-400,

@@ -42,7 +42,7 @@ function IdeasContent() {
             </div>
 
             <div className="flex flex-col md:flex-row gap-4 mb-10 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <div className="relative flex-grow">
+                <div className="relative grow">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                     <input 
                         type="text" 
@@ -83,11 +83,11 @@ function IdeasContent() {
                                 </div>
                             </div>
 
-                            <div className="p-6 flex-grow flex flex-col">
+                            <div className="p-6 grow flex flex-col">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">
                                     {idea.title}
                                 </h3>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2 flex-grow">
+                                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2 grow">
                                     {idea.shortDescription}
                                 </p>
                                 
@@ -123,7 +123,7 @@ function IdeasContent() {
 
                                     <Link 
                                         href={`/ideas/${idea.id}`}
-                                        className="py-2 px-4 bg-gray-50 hover:bg-indigo-50 text-indigo-600 dark:bg-gray-750 dark:hover:bg-gray-700 dark:text-indigo-400 font-bold rounded-lg transition-colors text-xs text-center border border-gray-200 dark:border-gray-650"
+                                        className="py-2 px-4 bg-gray-50 text-indigo-600 text-xs text-center"
                                     >
                                         View Details
                                     </Link>
