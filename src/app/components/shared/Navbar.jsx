@@ -65,9 +65,9 @@ const Navbar = () => {
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
                         <Link href="/" className="flex items-center cursor-pointer">
-                            <Lightbulb className="h-8 w-8 text-indigo-600 dark:text-indigo-400 animate-pulse" />
-                            <span className="ml-2 text-2xl font-extrabold bg-clip-text text-transparent bg-linear-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 tracking-tight">
-                                IdeaVault
+                            <Lightbulb className="h-8 w-8 text-custom animate-pulse" />
+                            <span className="ml-2 text-2xl font-extrabold text-custom tracking-tight">
+                                Idea<span className="font-normal">Vault</span>
                             </span>
                         </Link>
                     </div>
