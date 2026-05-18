@@ -1,8 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-@theme{
-  --color-custom:#3db4cc;
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-custom: #3db4cc;
 }
 @layer {
   .btn-custom {
