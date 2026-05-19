@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useIdeaVault } from "@/context/IdeaVaultContext";
+import { useIdeaVault } from "@/lib/ideaVaultStore";
 
 export default function AddIdeaPage() {
     const router = useRouter();
@@ -62,8 +62,7 @@ export default function AddIdeaPage() {
             imageUrl: imageUrl.trim() || "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             tags
         };
-
-        const success = addIdea(ideaData);
+        const success = await addIdea(ideaData);
         setSubmitting(false);
         if (success) {
             router.push("/my-ideas");

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import NavLink from "@/app/components/NavLink";
-import { useIdeaVault } from "@/context/IdeaVaultContext";
+import { useIdeaVault } from "@/lib/ideaVaultStore";
 import { 
   Lightbulb, Sun, Moon, LogOut, ChevronDown, User, Settings 
 } from "lucide-react";

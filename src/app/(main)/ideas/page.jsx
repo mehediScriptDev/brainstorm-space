@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { useIdeaVault } from "@/context/IdeaVaultContext";
+import { useIdeaVault } from "@/lib/ideaVaultStore";
 import { Search, Lightbulb } from "lucide-react";
 import IdeaCard from "@/app/components/shared/IdeaCard";
 

@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useIdeaVault } from "@/context/IdeaVaultContext";
+import { useIdeaVault } from "@/lib/ideaVaultStore";
 import { MessageSquare } from "lucide-react";
 
 export default function MyInteractionsPage() {

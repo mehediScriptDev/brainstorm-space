@@ -3,7 +3,7 @@
 import React, { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useIdeaVault } from "@/context/IdeaVaultContext";
+import { useIdeaVault } from "@/lib/ideaVaultStore";
 import { 
   Clock, Target, MessageSquare, Heart, Trash2, Edit, X, ArrowLeft 
 } from "lucide-react";

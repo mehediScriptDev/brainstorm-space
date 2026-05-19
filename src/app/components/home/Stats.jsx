@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useIdeaVault } from "@/context/IdeaVaultContext";
+import { useIdeaVault } from "@/lib/ideaVaultStore";
 
 const Stats = () => {
     const { ideas, comments } = useIdeaVault();

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useIdeaVault } from "@/context/IdeaVaultContext";
+import { useIdeaVault } from "@/lib/ideaVaultStore";
 
 export default function ClientLayout({ children }) {
     const { toasts } = useIdeaVault();

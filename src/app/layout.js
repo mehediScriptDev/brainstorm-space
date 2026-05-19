@@ -2,7 +2,6 @@ import { Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/shared/Navbar";
 import Footer from "@/app/components/shared/Footer";
-import { IdeaVaultProvider } from "@/context/IdeaVaultContext";
 import ClientLayout from "@/app/components/shared/ClientLayout";
 
 const manrope = Manrope({
@@ -27,15 +26,13 @@ export default function RootLayout({ children }) {
       className={`${manrope.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-base-100 text-base-content transition-colors duration-300">
-        <IdeaVaultProvider>
-          <ClientLayout>
-            <Navbar />
-            <div className="flex-1">
-              {children}
-            </div>
-            <Footer />
-          </ClientLayout>
-        </IdeaVaultProvider>
+        <ClientLayout>
+          <Navbar />
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
+        </ClientLayout>
       </body>
     </html>
   );

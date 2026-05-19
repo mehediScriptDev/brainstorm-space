@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useIdeaVault } from "@/context/IdeaVaultContext";
+import { useIdeaVault } from "@/lib/ideaVaultStore";
 import IdeaCard from "@/app/components/shared/IdeaCard";
 
 const TrendingIdeas = () => {
