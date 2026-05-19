@@ -9,22 +9,40 @@ if (!API_BASE_URL) console.warn("NEXT_PUBLIC_IDEAVAULT_API_URL is not set; API r
 
 let bootstrapPromise = null;
 let bootstrapIdeasCache = [];
+let bootstrapCommentsCache = [];
 let bootstrapSessionCache = { user: null, accessToken: null };
+
+function normalizeIdea(idea) {
+  if (!idea) return null;
+  return {
+    ...idea,
+    id: idea.id || (idea._id ? idea._id.toString() : `idea-${Date.now()}`),
+    _id: idea._id ? idea._id.toString() : idea._id,
+    likes: Number(idea.likes || 0),
+    commentsCount: Number(idea.commentsCount || 0)
+  };
+}
+
+function normalizeComment(comment) {
+  if (!comment) return null;
+  return {
+    ...comment,
+    id: comment.id || (comment._id ? comment._id.toString() : `comment-${Date.now()}`),
+    _id: comment._id ? comment._id.toString() : comment._id,
+    timestamp: comment.timestamp || new Date().toISOString()
+  };
+}
 
 const loadBootstrapData = async () => {
   if (!bootstrapPromise) {
     bootstrapPromise = Promise.all([
-      fetch(`${API_BASE_URL}/ideas`).then(async (response) => {
-        if (!response.ok) {
-          console.warn(`Failed to load ideas from ${API_BASE_URL}/ideas - status ${response.status}`);
-          return [];
-        }
-        return response.json();
-      }),
+      fetch(`${API_BASE_URL}/ideas`).then(async (response) => (response.ok ? response.json() : [])),
+      fetch(`${API_BASE_URL}/comments`).then(async (response) => (response.ok ? response.json() : [])),
       fetch(`/api/auth/get-session`).then(async (response) => (response.ok ? response.json() : null))
     ])
-      .then(([ideasRes, sessionRes]) => {
+      .then(([ideasRes, commentsRes, sessionRes]) => {
         bootstrapIdeasCache = Array.isArray(ideasRes) ? ideasRes.map(normalizeIdea).filter(Boolean) : [];
+        bootstrapCommentsCache = Array.isArray(commentsRes) ? commentsRes.map(normalizeComment).filter(Boolean) : [];
 
         if (sessionRes && sessionRes.user) {
           const raw = sessionRes.user;
@@ -42,29 +60,19 @@ const loadBootstrapData = async () => {
           bootstrapSessionCache = { user: null, accessToken: null };
         }
 
-        return { ideas: bootstrapIdeasCache, session: bootstrapSessionCache };
+        return { ideas: bootstrapIdeasCache, comments: bootstrapCommentsCache, session: bootstrapSessionCache };
       })
       .catch((error) => {
-        console.error("Error loading ideas/session:", error);
+        console.error("Error loading bootstrap data:", error);
         bootstrapIdeasCache = [];
+        bootstrapCommentsCache = [];
         bootstrapSessionCache = { user: null, accessToken: null };
-        return { ideas: [], session: bootstrapSessionCache };
+        return { ideas: [], comments: [], session: bootstrapSessionCache };
       });
   }
 
   return bootstrapPromise;
 };
-
-function normalizeIdea(idea) {
-  if (!idea) return null;
-  return {
-    ...idea,
-    id: idea.id || (idea._id ? idea._id.toString() : `idea-${Date.now()}`),
-    _id: idea._id ? idea._id.toString() : idea._id,
-    likes: Number(idea.likes || 0),
-    commentsCount: Number(idea.commentsCount || 0)
-  };
-}
 
 export function useIdeaVault() {
   const [ideas, setIdeas] = useState([]);
@@ -73,19 +81,22 @@ export function useIdeaVault() {
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState("light");
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [profileNameDraft, setProfileNameDraft] = useState("");
+  const [profilePhotoDraft, setProfilePhotoDraft] = useState("");
 
   useEffect(() => {
     let cancelled = false;
 
     const load = async () => {
-      const { ideas: ideasRes, session: sessionRes } = await loadBootstrapData();
-
+      const { ideas: loadedIdeas, comments: loadedComments, session: loadedSession } = await loadBootstrapData();
       if (cancelled) return;
 
-      setIdeas(ideasRes);
-      setActiveUser(sessionRes.user);
-      setToken(sessionRes.accessToken);
-      if (!cancelled) setIsLoading(false);
+      setIdeas(loadedIdeas);
+      setComments(loadedComments);
+      setActiveUser(loadedSession.user);
+      setToken(loadedSession.accessToken);
+      setIsLoading(false);
     };
 
     load();
@@ -97,17 +108,12 @@ export function useIdeaVault() {
   const toast = useToast();
 
   useEffect(() => {
-    // load theme from localStorage and apply
-    if (typeof window !== "undefined") {
-      const stored = window.localStorage.getItem("iv_theme") || "light";
-      setTheme(stored);
-      document.documentElement.setAttribute("data-theme", stored);
-      if (stored === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    }
+    if (typeof window === "undefined") return;
+
+    const stored = window.localStorage.getItem("iv_theme") || "light";
+    setTheme(stored);
+    document.documentElement.setAttribute("data-theme", stored);
+    document.documentElement.classList.toggle("dark", stored === "dark");
   }, []);
 
   const refreshSession = async () => {
@@ -132,24 +138,35 @@ export function useIdeaVault() {
     }
   };
 
+  const openProfileModal = () => {
+    if (!activeUser) return;
+    setProfileNameDraft(activeUser.name || "");
+    setProfilePhotoDraft(activeUser.photoUrl || "");
+    setIsProfileModalOpen(true);
+  };
+
+  const closeProfileModal = () => {
+    setIsProfileModalOpen(false);
+  };
+
   const login = async (email, password) => {
     try {
-      const { data, error } = await authClient.signIn.email({ email, password });
+      const { error } = await authClient.signIn.email({ email, password });
       if (error) throw new Error(error.message || "Login failed");
       await refreshSession();
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   };
 
   const register = async (name, email, photoUrl, password) => {
     try {
-      const { data, error } = await authClient.signUp.email({ name, email, password, image: photoUrl });
+      const { error } = await authClient.signUp.email({ name, email, password, image: photoUrl });
       if (error) throw new Error(error.message || "Register failed");
       await refreshSession();
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   };
@@ -169,11 +186,7 @@ export function useIdeaVault() {
     if (typeof window !== "undefined") {
       window.localStorage.setItem("iv_theme", next);
       document.documentElement.setAttribute("data-theme", next);
-      if (next === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+      document.documentElement.classList.toggle("dark", next === "dark");
     }
   };
 
@@ -186,12 +199,17 @@ export function useIdeaVault() {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
-        body: JSON.stringify({ ...ideaData })
+        body: JSON.stringify({
+          ...ideaData,
+          authorEmail: activeUser.email,
+          authorName: activeUser.name,
+          authorPhoto: activeUser.photoUrl
+        })
       });
       if (!res.ok) return false;
       const newIdea = normalizeIdea(await res.json());
-      setIdeas((prev) => [newIdea, ...prev.filter((i) => i.id !== newIdea.id)]);
-      bootstrapIdeasCache = [newIdea, ...bootstrapIdeasCache.filter((i) => i.id !== newIdea.id)];
+      setIdeas((prev) => [newIdea, ...prev.filter((idea) => idea.id !== newIdea.id)]);
+      bootstrapIdeasCache = [newIdea, ...bootstrapIdeasCache.filter((idea) => idea.id !== newIdea.id)];
       return true;
     } catch {
       return false;
@@ -210,8 +228,8 @@ export function useIdeaVault() {
       });
       if (!res.ok) return false;
       const updated = normalizeIdea(await res.json());
-      setIdeas((prev) => prev.map((i) => (i.id === id ? updated : i)));
-      bootstrapIdeasCache = bootstrapIdeasCache.map((i) => (i.id === id ? updated : i));
+      setIdeas((prev) => prev.map((idea) => (idea.id === id ? updated : idea)));
+      bootstrapIdeasCache = bootstrapIdeasCache.map((idea) => (idea.id === id ? updated : idea));
       return true;
     } catch {
       return false;
@@ -227,8 +245,8 @@ export function useIdeaVault() {
         }
       });
       if (res.status !== 204 && !res.ok) return false;
-      setIdeas((prev) => prev.filter((i) => i.id !== id));
-      bootstrapIdeasCache = bootstrapIdeasCache.filter((i) => i.id !== id);
+      setIdeas((prev) => prev.filter((idea) => idea.id !== id));
+      bootstrapIdeasCache = bootstrapIdeasCache.filter((idea) => idea.id !== id);
       return true;
     } catch {
       return false;
@@ -236,7 +254,7 @@ export function useIdeaVault() {
   };
 
   const likeIdea = async (id) => {
-    const target = ideas.find((i) => i.id === id);
+    const target = ideas.find((idea) => idea.id === id);
     if (!target) return;
     try {
       const res = await fetch(`${API_BASE_URL}/ideas/${encodeURIComponent(id)}`, {
@@ -249,8 +267,8 @@ export function useIdeaVault() {
       });
       if (!res.ok) return;
       const updated = normalizeIdea(await res.json());
-      setIdeas((prev) => prev.map((i) => (i.id === id ? updated : i)));
-      bootstrapIdeasCache = bootstrapIdeasCache.map((i) => (i.id === id ? updated : i));
+      setIdeas((prev) => prev.map((idea) => (idea.id === id ? updated : idea)));
+      bootstrapIdeasCache = bootstrapIdeasCache.map((idea) => (idea.id === id ? updated : idea));
     } catch {}
   };
 
@@ -266,15 +284,102 @@ export function useIdeaVault() {
         body: JSON.stringify({ email: activeUser.email, name, photoUrl })
       });
       if (!res.ok) return false;
-      // refresh ideas to reflect updated author fields
-      const refreshed = await fetch(`${API_BASE_URL}/ideas`).then((r) => (r.ok ? r.json() : []));
+      const refreshed = await fetch(`${API_BASE_URL}/ideas`).then((response) => (response.ok ? response.json() : []));
       const nextIdeas = Array.isArray(refreshed) ? refreshed.map(normalizeIdea).filter(Boolean) : [];
       setIdeas(nextIdeas);
       bootstrapIdeasCache = nextIdeas;
-      // refresh session to update local user
       await refreshSession();
       return true;
     } catch {
+      return false;
+    }
+  };
+
+  const addComment = async (ideaId, text) => {
+    if (!activeUser) {
+      toast?.addToast?.("error", "You must be logged in to comment.");
+      return false;
+    }
+    try {
+      const res = await fetch(`${API_BASE_URL}/ideas/${encodeURIComponent(ideaId)}/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ text, authorName: activeUser.name, authorEmail: activeUser.email, authorPhoto: activeUser.photoUrl })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast?.addToast?.("error", err.message || "Failed to post comment");
+        return false;
+      }
+      const saved = await res.json();
+      const newComment = normalizeComment({
+        id: saved.id || saved._id || `c-${Date.now()}`,
+        ideaId,
+        authorName: saved.authorName || activeUser.name,
+        authorEmail: saved.authorEmail || activeUser.email,
+        authorPhoto: saved.authorPhoto || activeUser.photoUrl,
+        text: saved.text,
+        timestamp: saved.timestamp || new Date().toISOString()
+      });
+      setComments((prev) => [newComment, ...prev]);
+      bootstrapCommentsCache = [newComment, ...bootstrapCommentsCache.filter((comment) => comment.id !== newComment.id)];
+      setIdeas((prev) => prev.map((idea) => (idea.id === ideaId ? { ...idea, commentsCount: (idea.commentsCount || 0) + 1 } : idea)));
+      toast?.addToast?.("success", "Comment posted");
+      return true;
+    } catch {
+      toast?.addToast?.("error", "Failed to post comment");
+      return false;
+    }
+  };
+
+  const editComment = async (commentId, text) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/comments/${encodeURIComponent(commentId)}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ text })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast?.addToast?.("error", err.message || "Failed to edit comment");
+        return false;
+      }
+      const updated = await res.json();
+      setComments((prev) => prev.map((comment) => (comment.id === commentId ? { ...comment, text: updated.text || text } : comment)));
+      toast?.addToast?.("success", "Comment updated");
+      return true;
+    } catch {
+      toast?.addToast?.("error", "Failed to edit comment");
+      return false;
+    }
+  };
+
+  const deleteComment = async (commentId, ideaId) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/comments/${encodeURIComponent(commentId)}`, {
+        method: "DELETE",
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        }
+      });
+      if (!res.ok && res.status !== 204) {
+        const err = await res.json().catch(() => ({}));
+        toast?.addToast?.("error", err.message || "Failed to delete comment");
+        return false;
+      }
+      setComments((prev) => prev.filter((comment) => comment.id !== commentId));
+      bootstrapCommentsCache = bootstrapCommentsCache.filter((comment) => comment.id !== commentId);
+      setIdeas((prev) => prev.map((idea) => (idea.id === ideaId ? { ...idea, commentsCount: Math.max(0, (idea.commentsCount || 0) - 1) } : idea)));
+      toast?.addToast?.("success", "Comment deleted");
+      return true;
+    } catch {
+      toast?.addToast?.("error", "Failed to delete comment");
       return false;
     }
   };
@@ -285,17 +390,22 @@ export function useIdeaVault() {
     activeUser,
     token,
     isLoading,
+    isProfileModalOpen,
+    profileNameDraft,
+    profilePhotoDraft,
+    setProfileNameDraft,
+    setProfilePhotoDraft,
+    openProfileModal,
+    closeProfileModal,
     login,
     loginWithGoogle: async () => {
       try {
         const { data, error } = await authClient.signInWithProvider("google", { disableRedirect: true });
         if (error) return false;
         if (data && data.url) {
-          // redirect the browser to the provider's auth URL
           window.location.href = data.url;
           return true;
         }
-        // if the server returned a token/session directly, refresh session
         await refreshSession();
         return true;
       } catch {
@@ -309,90 +419,9 @@ export function useIdeaVault() {
     updateIdea,
     deleteIdea,
     likeIdea,
-    addComment: async (ideaId, text) => {
-      if (!activeUser) {
-        toast?.addToast?.("error", "You must be logged in to comment.");
-        return false;
-      }
-      try {
-        const res = await fetch(`${API_BASE_URL}/ideas/${encodeURIComponent(ideaId)}/comments`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-          },
-          body: JSON.stringify({ text, authorName: activeUser.name, authorEmail: activeUser.email, authorPhoto: activeUser.photoUrl })
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          toast?.addToast?.("error", err.message || "Failed to post comment");
-          return false;
-        }
-        const saved = await res.json();
-        const newComment = {
-          id: saved.id || saved._id || `c-${Date.now()}`,
-          ideaId,
-          authorName: saved.authorName || activeUser.name,
-          authorEmail: saved.authorEmail || activeUser.email,
-          authorPhoto: saved.authorPhoto || activeUser.photoUrl,
-          text: saved.text,
-          timestamp: saved.timestamp || new Date().toISOString()
-        };
-        setComments((prev) => [newComment, ...prev]);
-        setIdeas((prev) => prev.map((i) => (i.id === ideaId ? { ...i, commentsCount: (i.commentsCount || 0) + 1 } : i)));
-        toast?.addToast?.("success", "Comment posted");
-        return true;
-      } catch (err) {
-        toast?.addToast?.("error", "Failed to post comment");
-        return false;
-      }
-    },
-    editComment: async (commentId, text) => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/comments/${encodeURIComponent(commentId)}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-          },
-          body: JSON.stringify({ text })
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          toast?.addToast?.("error", err.message || "Failed to edit comment");
-          return false;
-        }
-        const updated = await res.json();
-        setComments((prev) => prev.map((c) => (c.id === commentId ? { ...c, text: updated.text || text } : c)));
-        toast?.addToast?.("success", "Comment updated");
-        return true;
-      } catch {
-        toast?.addToast?.("error", "Failed to edit comment");
-        return false;
-      }
-    },
-    deleteComment: async (commentId, ideaId) => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/comments/${encodeURIComponent(commentId)}`, {
-          method: "DELETE",
-          headers: {
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-          }
-        });
-        if (!res.ok && res.status !== 204) {
-          const err = await res.json().catch(() => ({}));
-          toast?.addToast?.("error", err.message || "Failed to delete comment");
-          return false;
-        }
-        setComments((prev) => prev.filter((c) => c.id !== commentId));
-        setIdeas((prev) => prev.map((i) => (i.id === ideaId ? { ...i, commentsCount: Math.max(0, (i.commentsCount || 0) - 1) } : i)));
-        toast?.addToast?.("success", "Comment deleted");
-        return true;
-      } catch {
-        toast?.addToast?.("error", "Failed to delete comment");
-        return false;
-      }
-    },
+    addComment,
+    editComment,
+    deleteComment,
     theme,
     toggleTheme
   };

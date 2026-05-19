@@ -10,6 +10,19 @@ export default function MyIdeasPage() {
   const { ideas, activeUser, isLoading, updateIdea, deleteIdea } =
     useIdeaVault();
 
+  const normalizedActiveEmail = activeUser?.email?.trim().toLowerCase() || "";
+  const myIdeas = ideas.filter(
+    (idea) => idea.authorEmail?.trim().toLowerCase() === normalizedActiveEmail
+  );
+
+  useEffect(() => {
+    if (!isLoading) {
+      console.log("Active User:", activeUser);
+      console.log("All Ideas:", ideas);
+      console.log("My Ideas:", myIdeas);
+    }
+  }, [ideas, activeUser, isLoading, myIdeas]);
+
   useEffect(() => {
     if (!isLoading && !activeUser) {
       router.push("/login");
@@ -38,8 +51,6 @@ export default function MyIdeasPage() {
       </div>
     );
   }
-
-  const myIdeas = ideas.filter((idea) => idea.authorEmail === activeUser.email);
 
   const handleOpenEdit = (idea) => {
     setSelectedIdea(idea);

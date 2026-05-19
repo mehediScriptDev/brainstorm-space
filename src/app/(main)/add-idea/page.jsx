@@ -19,6 +19,7 @@ export default function AddIdeaPage() {
     const [imageUrl, setImageUrl] = useState("");
     const [tagsString, setTagsString] = useState("");
     const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState("");
 
     const categories = ["Tech", "Health", "AI", "Education", "Finance", "E-commerce", "Other"];
 
@@ -43,6 +44,15 @@ export default function AddIdeaPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
+        setSubmitting(true);
+
+        // Validate required fields
+        if (!title.trim() || !shortDescription.trim() || !problemStatement.trim() || !proposedSolution.trim() || !targetAudience.trim() || !detailedDescription.trim()) {
+            setError("All fields marked with * are required");
+            setSubmitting(false);
+            return;
+        }
 
         const tags = tagsString
             .split(",")
@@ -61,10 +71,18 @@ export default function AddIdeaPage() {
             imageUrl: imageUrl.trim() || "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             tags
         };
-        const success = await addIdea(ideaData);
-        setSubmitting(false);
-        if (success) {
-            router.push("/my-ideas");
+        
+        try {
+            const success = await addIdea(ideaData);
+            setSubmitting(false);
+            if (success) {
+                router.push("/my-ideas");
+            } else {
+                setError("Failed to post idea. Please try again.");
+            }
+        } catch (err) {
+            setSubmitting(false);
+            setError("An error occurred while posting your idea. Please try again.");
         }
     };
 
@@ -78,6 +96,12 @@ export default function AddIdeaPage() {
                         Fill in the details below to publish your concept to the community.
                     </p>
                 </div>
+
+                {error && (
+                    <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 m-6">
+                        <p className="text-red-700 dark:text-red-300 font-semibold text-sm">{error}</p>
+                    </div>
+                )}
 
                 <form onSubmit={handleSubmit} className="p-8 space-y-6 text-left">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
