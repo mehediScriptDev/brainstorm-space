@@ -4,10 +4,12 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useIdeaVault } from "@/lib/ideaVaultStore";
+import { useToast } from "@/app/components/shared/ToastProvider";
 
 export default function RegisterPage() {
     const router = useRouter();
     const { register, activeUser } = useIdeaVault();
+    const toast = useToast();
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -25,7 +27,17 @@ export default function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const success = register(name, email, photoUrl, password);
+        // client-side password validation
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const longEnough = password.length >= 6;
+        if (!hasUpper || !hasLower || !longEnough) {
+            toast.addToast("error", "Password must be at least 6 chars and include upper and lower case letters.");
+            setLoading(false);
+            return;
+        }
+
+        const success = await register(name, email, photoUrl, password);
         setLoading(false);
         if (success) {
             router.push("/");

@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/app/components/shared/Navbar";
 import Footer from "@/app/components/shared/Footer";
 import ClientLayout from "@/app/components/shared/ClientLayout";
+import ToastProvider from "@/app/components/shared/ToastProvider";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -27,11 +28,13 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col bg-base-100 text-base-content transition-colors duration-300">
         <ClientLayout>
-          <Navbar />
-          <div className="flex-1">
-            {children}
-          </div>
-          <Footer />
+          <ToastProvider>
+            <Navbar />
+            <div className="flex-1">
+              {children}
+            </div>
+            <Footer />
+          </ToastProvider>
         </ClientLayout>
       </body>
     </html>

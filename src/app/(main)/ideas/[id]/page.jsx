@@ -41,7 +41,7 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
                 setIdea(foundIdea);
                 document.title = `${foundIdea.title} | IdeaVault`;
             } else if (!isLoading) {
-                router.push("/ideas");
+                router.replace("/404");
             }
         }
     }, [ideas, params.id, isLoading, router]);
@@ -59,9 +59,9 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
         .filter((c) => c.ideaId === idea.id)
         .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    const handleAddComment = (e) => {
+    const handleAddComment = async (e) => {
         e.preventDefault();
-        const success = addComment(idea.id, newCommentText);
+        const success = await addComment(idea.id, newCommentText);
         if (success) {
             setNewCommentText("");
         }
@@ -72,8 +72,8 @@ export default function IdeaDetailsPage({ params: paramsPromise }) {
         setEditingCommentText(comment.text);
     };
 
-    const handleSaveEdit = (commentId) => {
-        const success = editComment(commentId, editingCommentText);
+    const handleSaveEdit = async (commentId) => {
+        const success = await editComment(commentId, editingCommentText);
         if (success) {
             setEditingCommentId(null);
             setEditingCommentText("");

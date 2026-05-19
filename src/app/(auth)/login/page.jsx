@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useIdeaVault } from "@/lib/ideaVaultStore";
+import { useToast } from "@/app/components/shared/ToastProvider";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -23,17 +24,22 @@ export default function LoginPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const success = login(email, password);
+        const success = await login(email, password);
         setLoading(false);
         if (success) {
             router.push("/");
         }
     };
 
-    const handleGoogleLogin = () => {
-        const success = loginWithGoogle();
+    const toast = useToast();
+
+    const handleGoogleLogin = async () => {
+        const success = await loginWithGoogle();
         if (success) {
             router.push("/");
+        } else {
+            const t = toast || { addToast: () => {} };
+            t.addToast("error", "Google sign-in is not configured yet in this dev auth setup.");
         }
     };
 

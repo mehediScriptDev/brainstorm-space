@@ -49,14 +49,14 @@ export default function MyIdeasPage() {
     setEditModalOpen(true);
   };
 
-  const handleEditSubmit = (e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
     const updatedData = {
       title: editTitle,
       shortDescription: editShortDescription,
       category: editCategory,
     };
-    const success = updateIdea(selectedIdea.id, updatedData);
+    const success = await updateIdea(selectedIdea.id, updatedData);
     if (success) {
       setEditModalOpen(false);
       setSelectedIdea(null);
@@ -68,8 +68,8 @@ export default function MyIdeasPage() {
     setDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    const success = deleteIdea(selectedIdea.id);
+  const handleConfirmDelete = async () => {
+    const success = await deleteIdea(selectedIdea.id);
     if (success) {
       setDeleteModalOpen(false);
       setSelectedIdea(null);
