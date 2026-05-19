@@ -43,7 +43,6 @@ export default function AddIdeaPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setSubmitting(true);
 
         const tags = tagsString
             .split(",")
